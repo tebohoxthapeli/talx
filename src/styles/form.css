@@ -1,0 +1,108 @@
+/* ----- H2 HEADER -----*/
+
+h2.ui.header {
+  color: var(--black-20);
+  margin-bottom: 2rem;
+}
+
+/* ------ FORM SUBMIT BUTTON ------ */
+
+.submitBtn {
+  background-color: var(--orange-300) !important;
+  color: var(--black-300) !important;
+}
+
+/* ------ FORM SUBMIT BUTTON HOVER + FOCUS------ */
+
+.submitBtn:hover,
+.submitBtn:focus {
+  background-color: var(--orange-250) !important;
+}
+
+/* ----- FORM INPUT ----- */
+
+.ui.input {
+  color: var(--black-30) !important;
+}
+
+/* ----- FORM INPUT INPUT ----- */
+
+.ui.input > input {
+  color: var(--black-30) !important;
+  background: transparent !important;
+}
+
+.ui.input:not([class*="action"]) > input {
+  border: 1px solid var(--black-30) !important;
+}
+
+/* ----- FORM INPUT INPUT FOCUS ----- */
+
+.ui.input > input:focus {
+  color: white !important;
+  border-color: var(--orange-300) !important;
+}
+
+/* ------ FORM INPUT WHEN THERE'S ERROR ------- */
+
+.ui.form .field.inputError .ui.input > input {
+  border-color: var(--error-color) !important;
+}
+
+/* ------ FORM ->TEXT AREA ------- */
+
+.ui.form textarea {
+  margin-bottom: 2rem;
+  min-height: 100px;
+  color: var(--black-30);
+  background-color: transparent;
+  border: 1px solid var(--black-70);
+  resize: none;
+}
+
+/* ------ FORM ->TEXT AREA FOCUS------- */
+
+.ui.form textarea:focus {
+  color: white;
+  background-color: transparent;
+  border-color: var(--orange-300);
+}
+
+/* ------ TEXT AREA + INPUT TEXT SELECTION ------- */
+
+.ui.form textarea::selection,
+.ui.input > input::selection {
+  background: var(--orange-300);
+}
+
+/* ------ INVERTED ORANGE BUTTON HOVER + FOCUS ------ */
+
+.ui.inverted.orange.button:hover,
+.ui.inverted.orange.button:focus {
+  color: var(--black-300);
+}
+
+/* ------ LOADING FORM BEFORE ------- */
+
+.ui.loading.form::before {
+  background: transparent;
+}
+
+/* ------ ERROR MESSAGE ------- */
+
+.ui.error.message {
+  background-color: var(--black-300);
+  color: var(--error-color);
+  box-shadow: 0 0 0 1px var(--error-color) inset, 0 0 0 0 transparent;
+}
+
+.CommentForm {
+  width: 100%;
+}
+
+.comment-form-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

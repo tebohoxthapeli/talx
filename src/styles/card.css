@@ -1,0 +1,106 @@
+/*----- CARD -----*/
+
+.ui.card {
+  box-shadow: none !important;
+  background: transparent !important;
+  border: 1px solid var(--black-200) !important;
+}
+
+/*----- CARD CONTENT -----*/
+
+.ui.card > .content {
+  background: var(--black-250);
+}
+
+/*----- CARD CONTENT HEADER -----*/
+
+.ui.card > .content > a.header,
+.ui.card > .content > .header {
+  color: var(--black-30);
+}
+
+/*----- CARD CONTENT HEADER HOVER + FOCUS -----*/
+
+.ui.card > .content > a.header:hover,
+.ui.card > .content > a.header:focus {
+  color: var(--black-50);
+}
+
+/*----- CARD EXTRA -----*/
+
+.ui.card > .extra {
+  background: var(--black-300);
+}
+
+/*----- POST META -----*/
+
+.ui.card .meta {
+  color: var(--orange-300);
+}
+
+/*----- POST META HOVER -----*/
+
+.ui.card a.meta:hover {
+  color: var(--orange-200);
+}
+
+/* ----- POST CONTENT DESCRIPTION ------ */
+
+.ui.card > .content > .description {
+  color: white;
+}
+
+/* ---- ORANGE BUTTON ------*/
+
+.ui.orange.button,
+.ui.orange.button:hover,
+.ui.orange.button:focus {
+  color: var(--black-300);
+}
+
+/* ----- BASIC ORANGE LABEL -----*/
+
+.ui.basic.orange.label {
+  background: transparent !important;
+}
+
+/* ----- RED + GREEN BUTTONS ----*/
+
+.ui.red.button:hover,
+.ui.green.button:hover,
+.ui.red.button:focus,
+.ui.green.button:focus {
+  color: var(--black-300) !important;
+}
+
+/* .header-meta-wrapper {
+  display: flex;
+} */
+
+/* .ui.modal > .header {
+  background: var(--black-300);
+  color: var(--orange-300);
+  border: 1px solid var(--black-70);
+} */
+
+/* .ui.modal > .content {
+  background: var(--black-200);
+  color: white;
+  border: 1px solid var(--black-70);
+} */
+
+/* .ui.modal > .actions {
+  background: var(--black-300);
+  border: 1px solid var(--black-70);
+}
+
+.ui.primary.button {
+  background-color: var(--orange-300);
+  color: var(--black-300);
+}
+
+.ui.primary.button:hover,
+.ui.primary.button:focus {
+  background-color: var(--orange-250);
+  color: var(--black-300);
+} */
