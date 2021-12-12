@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Grid, Header, Transition, Loader } from "semantic-ui-react";
 
 import PostCard from "./PostCard";
 import { useContextMethods } from "../context/methods";
 
-import { useQuery, useLazyQuery } from "@apollo/react-hooks";
+import { useQuery, useLazyQuery } from "@apollo/client";
 import { GET_ALL_POSTS, GET_USER_POSTS } from "../graphql/post";
 import { GET_USER_FOLLOWING } from "../graphql/follow";
 

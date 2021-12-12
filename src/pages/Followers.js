@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import { useQuery } from "@apollo/client";
+import { useState, useEffect } from "react";
 import { List, Segment, Header, Loader } from "semantic-ui-react";
 import { useParams } from "react-router-dom";
 
 import FollowCard from "../components/FollowCard";
 import { useContextMethods } from "../context/methods";
 
-import { useQuery } from "@apollo/react-hooks";
 import { GET_USER_FOLLOWERS } from "../graphql/follow";
 import { GET_USER } from "../graphql/user";
 

@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import { useQuery } from "@apollo/client";
+import { useState, useEffect } from "react";
 import moment from "moment";
 
 import { useParams, useHistory, Link } from "react-router-dom";
@@ -11,7 +12,6 @@ import CommentForm from "../components/CommentForm";
 import CommentCard from "../components/CommentCard";
 import MyPopup from "../util/MyPopup";
 
-import { useQuery } from "@apollo/react-hooks";
 import { GET_POST } from "../graphql/post";
 import { GET_POST_LIKES } from "../graphql/like";
 import { GET_POST_COMMENTS } from "../graphql/comment";

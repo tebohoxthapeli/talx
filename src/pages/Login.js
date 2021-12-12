@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { useMutation } from "@apollo/client";
 import { Form, Button, Header, Grid, Container } from "semantic-ui-react";
-import { useMutation } from "@apollo/react-hooks";
 import { Link, useHistory } from "react-router-dom";
 
 import { useForm } from "../util/hooks";
@@ -12,27 +12,44 @@ import "../styles/form.css";
 function Login() {
   const history = useHistory();
   const { login } = useContextMethods();
-  const [errors, setErrors] = useState({});
 
-  const { onChange, onSubmit, values } = useForm(loginUserCallback, {
+  const [errors, setErrors] = useState({});
+  const [values, setValues] = useState({
     username: "",
     password: "",
   });
 
-  const [loginUser, { loading }] = useMutation(LOGIN, {
+  const onChange = (e) => {
+    setValues({ ...values, [e.target.name]: e.target.value });
+  };
+
+  const [loginUser, { client, loading }] = useMutation(LOGIN, {
     variables: values,
     update(_, { data: { login: userData } }) {
       login(userData);
       history.push("/");
     },
-    onError(err) {
-      setErrors(err.graphQLErrors[0].extensions.errors);
+    onError(apolloError) {
+      setErrors(apolloError.graphQLErrors[0].extensions.errors);
     },
   });
 
-  function loginUserCallback() {
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    // clear the cache before login new user
+    await client.clearStore();
     loginUser();
-  }
+  };
+
+  // const loginUserCallback = async () => {
+  //   await client.clearStore();
+  //   loginUser();
+  // };
+
+  // const { onChange, onSubmit, values } = useForm(loginUserCallback, {
+  //   username: "",
+  //   password: "",
+  // });
 
   return (
     <Container className="Form__Container">

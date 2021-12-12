@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Button, Confirm } from "semantic-ui-react";
 
 import MyPopup from "../util/MyPopup";
 
-import { useMutation } from "@apollo/react-hooks";
+import { useMutation } from "@apollo/client";
 import { GET_ALL_POSTS, DELETE_POST } from "../graphql/post";
 import { DELETE_COMMENT, GET_POST_COMMENTS } from "../graphql/comment";
 
@@ -45,8 +45,8 @@ function DeleteButton({ post_id, comment_id, callback }) {
       },
     ],
 
-    onError(err) {
-      throw new Error(err);
+    onError(apolloError) {
+      throw new Error(apolloError.message);
     },
   });
 

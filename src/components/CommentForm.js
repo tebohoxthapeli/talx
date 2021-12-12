@@ -1,8 +1,8 @@
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Card, Form } from "semantic-ui-react";
 
-import { useMutation } from "@apollo/react-hooks";
-import { CREATE_COMMENT, GET_POST_COMMENTS } from "../graphql/comment";
+import { useMutation } from "@apollo/client";
+import { CREATE_COMMENT } from "../graphql/comment"; // left out GET_POST_COMMENTS
 
 import "../styles/form.css";
 import "../styles/card.css";
@@ -17,15 +17,17 @@ function CommentForm({ post_id }) {
       body,
     },
 
-    refetchQueries: [
-      {
-        query: GET_POST_COMMENTS,
-        variables: { post_id },
-      },
-    ],
+    refetchQueries: ["getPostComments"],
 
-    onError(err) {
-      console.log(err);
+    // refetchQueries: [
+    //   {
+    //     query: GET_POST_COMMENTS,
+    //     variables: { post_id },
+    //   },
+    // ],
+
+    onError(apolloError) {
+      console.log(apolloError.message);
     },
   });
 

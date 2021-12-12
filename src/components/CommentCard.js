@@ -1,4 +1,3 @@
-import React from "react";
 import moment from "moment";
 import { Card, Image } from "semantic-ui-react";
 import { Link } from "react-router-dom";

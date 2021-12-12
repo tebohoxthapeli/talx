@@ -1,4 +1,3 @@
-import React from "react";
 import { Button, Header, Image } from "semantic-ui-react";
 import { Link, useLocation } from "react-router-dom";
 

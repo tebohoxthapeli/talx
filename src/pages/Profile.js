@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import { useQuery } from "@apollo/client";
+import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import {
   Image,
@@ -16,7 +17,6 @@ import FollowButton from "../components/FollowButton";
 import FollowLinks from "../components/FollowLinks";
 import { useContextMethods } from "../context/methods";
 
-import { useQuery } from "@apollo/react-hooks";
 import { GET_USER } from "../graphql/user";
 
 function Profile() {

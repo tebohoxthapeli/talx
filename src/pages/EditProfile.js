@@ -1,10 +1,9 @@
-import React from "react";
+import { useQuery } from "@apollo/client";
 import { Loader } from "semantic-ui-react";
 
 import { useContextMethods } from "../context/methods";
 import EditProfileSend from "../components/EditProfileSend";
 
-import { useQuery } from "@apollo/react-hooks";
 import { GET_USER } from "../graphql/user";
 
 function EditProfile() {

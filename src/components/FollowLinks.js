@@ -1,8 +1,7 @@
-import React from "react";
 import { Label } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 
-import { useQuery } from "@apollo/react-hooks";
+import { useQuery } from "@apollo/client";
 import { GET_USER_FOLLOWERS, GET_USER_FOLLOWING } from "../graphql/follow";
 
 function FollowLinks({ user_id }) {
@@ -24,7 +23,9 @@ function FollowLinks({ user_id }) {
           style={{ marginBottom: 0 }}
         >
           Following
-          <Label.Detail>{following && following.getUserFollowing.length}</Label.Detail>
+          <Label.Detail>
+            {following && following.getUserFollowing.length}
+          </Label.Detail>
         </Label>
 
         <Label
@@ -34,7 +35,9 @@ function FollowLinks({ user_id }) {
           style={{ marginBottom: 0 }}
         >
           Followers
-          <Label.Detail>{followers && followers.getUserFollowers.length}</Label.Detail>
+          <Label.Detail>
+            {followers && followers.getUserFollowers.length}
+          </Label.Detail>
         </Label>
       </Label.Group>
     </>

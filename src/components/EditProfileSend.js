@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useHistory, Link } from "react-router-dom";
 import { Form, Button, Grid, Header } from "semantic-ui-react";
 
 import { useContextMethods } from "../context/methods";
 import { useForm } from "../util/hooks";
 
-import { useMutation } from "@apollo/react-hooks";
+import { useMutation } from "@apollo/client";
 import { EDIT_USER, GET_USER } from "../graphql/user";
 
 function EditProfileSend({ user }) {
@@ -42,8 +42,8 @@ function EditProfileSend({ user }) {
       }
     },
 
-    onError(err) {
-      setErrors(err.graphQLErrors[0].extensions.errors);
+    onError(apolloError) {
+      setErrors(apolloError.graphQLErrors[0].extensions.errors);
     },
   });
 

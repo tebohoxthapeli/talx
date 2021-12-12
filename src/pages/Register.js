@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { Form, Button, Grid, Container, Header } from "semantic-ui-react";
-import { useMutation } from "@apollo/react-hooks";
+import { useMutation } from "@apollo/client";
 
 import { useContextMethods } from "../context/methods";
 import { useForm } from "../util/hooks";
@@ -27,8 +27,8 @@ function Register() {
       history.push("/");
     },
     variables: values,
-    onError(err) {
-      setErrors(err.graphQLErrors[0].extensions.errors);
+    onError(apolloError) {
+      setErrors(apolloError.graphQLErrors[0].extensions.errors);
     },
   });
 

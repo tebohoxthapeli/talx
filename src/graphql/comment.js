@@ -1,4 +1,4 @@
-import gql from "graphql-tag";
+import { gql } from "@apollo/client";
 
 const CREATE_COMMENT = gql`
   mutation createComment($post_id: ID!, $body: String!) {

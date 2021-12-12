@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Input, Button, Header, Grid, Image } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 
-import { useLazyQuery } from "@apollo/react-hooks";
+import { useLazyQuery } from "@apollo/client";
 import { SEARCH_USER } from "../graphql/user";
 
 function SearchUser() {
@@ -19,8 +19,8 @@ function SearchUser() {
   const [searchUser, { data, loading, error }] = useLazyQuery(SEARCH_USER, {
     variables: { username },
 
-    onError(err) {
-      setErrors(err.graphQLErrors[0].extensions.errors);
+    onError(apolloError) {
+      setErrors(apolloError.graphQLErrors[0].extensions.errors);
     },
   });
 

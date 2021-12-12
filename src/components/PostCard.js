@@ -1,4 +1,3 @@
-import React from "react";
 import { Card, Label, Image, Button } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import moment from "moment";
@@ -8,7 +7,7 @@ import LikeButton from "./LikeButton";
 import DeleteButton from "./DeleteButton";
 import MyPopup from "../util/MyPopup";
 
-import { useQuery } from "@apollo/react-hooks";
+import { useQuery } from "@apollo/client";
 import { GET_POST_LIKES } from "../graphql/like";
 import { GET_POST_COMMENTS } from "../graphql/comment";
 

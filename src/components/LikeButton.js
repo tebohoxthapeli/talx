@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Label, Button } from "semantic-ui-react";
 
 import MyPopup from "../util/MyPopup";
 import { useContextMethods } from "../context/methods";
 
-import { useMutation } from "@apollo/react-hooks";
+import { useMutation } from "@apollo/client";
 import { GET_POST_LIKES, TOGGLE_LIKE } from "../graphql/like";
 
 function LikeButton({ post_id, likes }) {

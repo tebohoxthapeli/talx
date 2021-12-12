@@ -1,10 +1,9 @@
-import React from "react";
 import { Form, Button, TextArea } from "semantic-ui-react";
 
 import { useForm } from "../util/hooks";
 
-import { useMutation } from "@apollo/react-hooks";
-import { GET_ALL_POSTS, CREATE_POST } from "../graphql/post";
+import { useMutation } from "@apollo/client";
+import { CREATE_POST } from "../graphql/post"; // left out GET_ALL_POSTS
 
 import "../styles/form.css";
 
@@ -15,13 +14,14 @@ function PostForm() {
 
   const [createPost, { loading }] = useMutation(CREATE_POST, {
     variables: values,
-    refetchQueries: [
-      {
-        query: GET_ALL_POSTS,
-      },
-    ],
-    onError(err) {
-      return err;
+    refetchQueries: ["getAllPosts"],
+    // refetchQueries: [
+    //   {
+    //     query: GET_ALL_POSTS,
+    //   },
+    // ],
+    onError(apolloError) {
+      return apolloError;
     },
   });
 

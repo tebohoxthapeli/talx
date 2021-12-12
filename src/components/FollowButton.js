@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "semantic-ui-react";
 
 import { useContextMethods } from "../context/methods";
 
-import { useMutation, useQuery } from "@apollo/react-hooks";
+import { useMutation, useQuery } from "@apollo/client";
 import { TOGGLE_FOLLOW, GET_USER_FOLLOWING } from "../graphql/follow";
-import { GET_ALL_POSTS } from "../graphql/post";
+// import { GET_ALL_POSTS } from "../graphql/post";
 
 function FollowButton({ user_id }) {
   // ---- CURRENT USER -----
@@ -33,17 +33,18 @@ function FollowButton({ user_id }) {
 
   const [toggleFollow] = useMutation(TOGGLE_FOLLOW, {
     variables: { user_id },
-    refetchQueries: [
-      {
-        query: GET_USER_FOLLOWING,
-        variables: { user_id: current_user },
-      },
-      {
-        query: GET_ALL_POSTS,
-      },
-    ],
-    onError(err) {
-      console.log(err);
+    refetchQueries: ["getUserFollowing", "getAllPosts"],
+    // refetchQueries: [
+    //   {
+    //     query: GET_USER_FOLLOWING,
+    //     variables: { user_id: current_user },
+    //   },
+    //   {
+    //     query: GET_ALL_POSTS,
+    //   },
+    // ],
+    onError(apolloError) {
+      console.log(apolloError.message);
     },
   });
 
