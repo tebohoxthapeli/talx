@@ -1,4 +1,6 @@
 import { useDataLayerValue } from "./DataLayer";
+import React from "react";
+
 
 const useContextMethods = () => {
   const [{ user }, dispatch] = useDataLayerValue();

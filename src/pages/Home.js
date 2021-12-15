@@ -1,5 +1,7 @@
 import { useQuery } from "@apollo/client";
 import { Grid, Transition, Header, Loader } from "semantic-ui-react";
+import React from "react";
+
 
 import PostCard from "../components/PostCard";
 import PostForm from "../components/PostForm";

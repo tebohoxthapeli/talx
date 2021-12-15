@@ -2,6 +2,8 @@ import { List, Image } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 
 import FollowButton from "./FollowButton";
+import React from "react";
+
 
 function FollowCard({ user: { _id: user_id, username, about } }) {
   return (

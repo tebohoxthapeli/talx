@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import React from "react";
+
 import { Grid, Header, Transition, Loader } from "semantic-ui-react";
 
 import PostCard from "./PostCard";

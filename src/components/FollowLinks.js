@@ -1,5 +1,7 @@
 import { Label } from "semantic-ui-react";
 import { Link } from "react-router-dom";
+import React from "react";
+
 
 import { useQuery } from "@apollo/client";
 import { GET_USER_FOLLOWERS, GET_USER_FOLLOWING } from "../graphql/follow";

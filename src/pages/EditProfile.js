@@ -1,5 +1,6 @@
 import { useQuery } from "@apollo/client";
 import { Loader } from "semantic-ui-react";
+import React from "react"
 
 import { useContextMethods } from "../context/methods";
 import EditProfileSend from "../components/EditProfileSend";

@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import React from "react";
+
 import { Input, Button, Header, Grid, Image } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 

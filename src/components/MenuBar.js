@@ -1,5 +1,7 @@
 import { Button, Header, Image } from "semantic-ui-react";
 import { Link, useLocation } from "react-router-dom";
+import React from "react";
+
 
 import { useContextMethods } from "../context/methods";
 import MyPopup from "../util/MyPopup";

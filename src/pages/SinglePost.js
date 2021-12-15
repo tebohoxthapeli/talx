@@ -1,5 +1,7 @@
 import { useQuery } from "@apollo/client";
 import { useState, useEffect } from "react";
+import React from "react";
+
 import moment from "moment";
 
 import { useParams, useHistory, Link } from "react-router-dom";

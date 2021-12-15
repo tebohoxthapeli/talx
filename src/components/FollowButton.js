@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { Button } from "semantic-ui-react";
 
 import { useContextMethods } from "../context/methods";
+import React from "react";
+
 
 import { useMutation, useQuery } from "@apollo/client";
 import { TOGGLE_FOLLOW, GET_USER_FOLLOWING } from "../graphql/follow";

@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { Label, Button } from "semantic-ui-react";
+import React from "react";
+
 
 import MyPopup from "../util/MyPopup";
 import { useContextMethods } from "../context/methods";
