@@ -1,68 +1,70 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "semantic-ui-react";
-
-import { useContextMethods } from "../context/methods";
-import React from "react";
-
-
 import { useMutation, useQuery } from "@apollo/client";
+
+// import { useContextMethods } from "../context/methods";
 import { TOGGLE_FOLLOW, GET_USER_FOLLOWING } from "../graphql/follow";
+import { useDataLayerValue } from "../context/DataLayer";
 // import { GET_ALL_POSTS } from "../graphql/post";
 
 function FollowButton({ user_id }) {
-  // ---- CURRENT USER -----
-  const {
-    user: { _id: current_user },
-  } = useContextMethods();
+    // ---- CURRENT USER -----
+    // const {
+    //     user: { _id: current_user },
+    // } = useContextMethods();
 
-  // ----- CURRENT USER FOLLOWING -----
-  const { data: currentUserData } = useQuery(GET_USER_FOLLOWING, {
-    variables: { user_id: current_user },
-  });
+    const [
+        {
+            user: { _id: current_user },
+        },
+    ] = useDataLayerValue();
 
-  const [isCurrentUserFollowing, setIsCurrentUserFollowing] = useState(false);
+    // ----- CURRENT USER FOLLOWING -----
+    const { data: currentUserData } = useQuery(GET_USER_FOLLOWING, {
+        variables: { user_id: current_user },
+    });
 
-  useEffect(() => {
-    currentUserData &&
-      setIsCurrentUserFollowing(
-        currentUserData.getUserFollowing.find(
-          ({ follow_to }) => follow_to._id === user_id
-        )
-          ? true
-          : false
-      );
-  }, [currentUserData, user_id]);
+    const [isCurrentUserFollowing, setIsCurrentUserFollowing] = useState(false);
 
-  const [toggleFollow] = useMutation(TOGGLE_FOLLOW, {
-    variables: { user_id },
-    refetchQueries: ["getUserFollowing", "getAllPosts"],
-    // refetchQueries: [
-    //   {
-    //     query: GET_USER_FOLLOWING,
-    //     variables: { user_id: current_user },
-    //   },
-    //   {
-    //     query: GET_ALL_POSTS,
-    //   },
-    // ],
-    onError(apolloError) {
-      console.log(apolloError.message);
-    },
-  });
+    useEffect(() => {
+        currentUserData &&
+            setIsCurrentUserFollowing(
+                currentUserData.getUserFollowing.find(({ follow_to }) => follow_to._id === user_id)
+                    ? true
+                    : false
+            );
+    }, [currentUserData, user_id]);
 
-  return (
-    <>
-      {user_id !== current_user && (
-        <Button
-          style={{ width: "7rem" }}
-          content={`${isCurrentUserFollowing ? "Unfollow" : "Follow"}`}
-          inverted
-          color={`${isCurrentUserFollowing ? "red" : "green"}`}
-          onClick={toggleFollow}
-        />
-      )}
-    </>
-  );
+    const [toggleFollow] = useMutation(TOGGLE_FOLLOW, {
+        variables: { user_id },
+        refetchQueries: ["getUserFollowing", "getAllPosts"],
+        // refetchQueries: [
+        //   {
+        //     query: GET_USER_FOLLOWING,
+        //     variables: { user_id: current_user },
+        //   },
+        //   {
+        //     query: GET_ALL_POSTS,
+        //   },
+        // ],
+        onError(apolloError) {
+            console.log(apolloError.message);
+        },
+    });
+
+    return (
+        <>
+            {user_id !== current_user && (
+                <Button
+                    style={{ width: "7rem" }}
+                    content={`${isCurrentUserFollowing ? "Unfollow" : "Follow"}`}
+                    inverted
+                    color={`${isCurrentUserFollowing ? "red" : "green"}`}
+                    onClick={toggleFollow}
+                />
+            )}
+        </>
+    );
 }
 
 export default FollowButton;

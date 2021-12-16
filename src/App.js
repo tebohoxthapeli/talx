@@ -5,7 +5,6 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "semantic-ui-css/semantic.min.css";
 import "./App.css";
 
-import AuthRoute from "./util/AuthRoute";
 import { DataLayer } from "./context/DataLayer";
 import { initialState } from "./context/reducer";
 
@@ -44,33 +43,15 @@ function App() {
                     <div className="App__Grid">
                         <div className="App__Main">
                             <Routes>
-                                <AuthRoute exact path="/" component={Home} />
-                                <AuthRoute path="/login" component={Login} />
-                                <AuthRoute
-                                    path="/register"
-                                    component={Register}
-                                />
-                                <AuthRoute
-                                    path="/profile/:user_id"
-                                    component={Profile}
-                                />
-                                <AuthRoute
-                                    path="/following/:user_id"
-                                    component={Following}
-                                />
-                                <AuthRoute
-                                    path="/followers/:user_id"
-                                    component={Followers}
-                                />
-                                <AuthRoute
-                                    path="/edit/:user_id"
-                                    component={EditProfile}
-                                />
-                                <AuthRoute
-                                    path="/post/:post_id"
-                                    component={SinglePost}
-                                />
-                                <Route component={NotFound} />
+                                <Route path="/" element={<Home />} />
+                                <Route path="/login" element={<Login />} />
+                                <Route path="/register" element={<Register />} />
+                                <Route path="/profile/:user_id" element={<Profile />} />
+                                <Route path="/following/:user_id" element={<Following />} />
+                                <Route path="/followers/:user_id" element={<Followers />} />
+                                <Route path="/edit/:user_id" element={<EditProfile />} />
+                                <Route path="/post/:post_id" element={<SinglePost />} />
+                                <Route element={<NotFound />} />
                             </Routes>
                         </div>
 

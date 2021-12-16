@@ -1,11 +1,8 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Confirm } from "semantic-ui-react";
-import React from "react";
-
+import { useMutation } from "@apollo/client";
 
 import MyPopup from "../util/MyPopup";
-
-import { useMutation } from "@apollo/client";
 import { GET_ALL_POSTS, DELETE_POST } from "../graphql/post";
 import { DELETE_COMMENT, GET_POST_COMMENTS } from "../graphql/comment";
 

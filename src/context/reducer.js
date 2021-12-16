@@ -1,10 +1,6 @@
-import React from "react";
+const initialState = { user: null };
 
-const initialState = {
-    user: null,
-};
-
-const reducer = (state, action) => {
+function reducer(state, action) {
     switch (action.type) {
         case "LOGIN":
             return {
@@ -21,6 +17,6 @@ const reducer = (state, action) => {
         default:
             return state;
     }
-};
+}
 
 export { initialState, reducer };

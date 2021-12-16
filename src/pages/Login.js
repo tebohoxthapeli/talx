@@ -1,70 +1,56 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useMutation } from "@apollo/client";
 import { Form, Button, Header, Grid, Container } from "semantic-ui-react";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { useForm } from "../util/hooks";
 import { useContextMethods } from "../context/methods";
+import { useDataLayerValue } from "../context/DataLayer";
 import { LOGIN } from "../graphql/user";
 
 import "../styles/form.css";
 
 function Login() {
-    const history = useHistory();
+    const navigate = useNavigate();
     const { login } = useContextMethods();
+    const [{ user }] = useDataLayerValue();
+
+    useEffect(() => {
+        if (user) navigate("/");
+    }, [user, navigate]);
 
     const [errors, setErrors] = useState({});
-    const [values, setValues] = useState({
+
+    const { onChange, onSubmit, values } = useForm(loginUserCallback, {
         username: "",
         password: "",
     });
 
-    const onChange = (e) => {
-        setValues({ ...values, [e.target.name]: e.target.value });
-    };
-
-    const [loginUser, { client, loading }] = useMutation(LOGIN, {
+    const [loginUser, { loading }] = useMutation(LOGIN, {
         variables: values,
-        update(_, { data: { login: userData } }) {
+
+        onCompleted({ login: userData }) {
             login(userData);
-            history.push("/");
+            navigate("/", { replace: true });
         },
+
         onError(apolloError) {
             setErrors(apolloError.graphQLErrors[0].extensions.errors);
         },
     });
 
-    const onSubmit = async (e) => {
-        e.preventDefault();
-        // clear the cache before login new user
-        await client.clearStore();
+    function loginUserCallback() {
         loginUser();
-    };
-
-    // const loginUserCallback = async () => {
-    //   await client.clearStore();
-    //   loginUser();
-    // };
-
-    // const { onChange, onSubmit, values } = useForm(loginUserCallback, {
-    //   username: "",
-    //   password: "",
-    // });
+    }
 
     return (
         <Container className="Form__Container">
             <Grid textAlign="center" style={{ maxWidth: 500 }}>
                 <Grid.Row>
                     <Grid.Column>
-                        <Header as="h2">
-                            Ready to connect with your friends?
-                        </Header>
+                        <Header as="h2">Ready to connect with your friends?</Header>
 
-                        <Form
-                            size="large"
-                            autoComplete="off"
-                            noValidate
-                            onSubmit={onSubmit}>
+                        <Form size="large" autoComplete="off" noValidate onSubmit={onSubmit}>
                             <Form.Input
                                 fluid
                                 inverted
@@ -97,9 +83,7 @@ function Login() {
                                 fluid
                                 type="submit"
                                 size="large"
-                                className={`ovalBtn submitBtn ${
-                                    loading && "loading"
-                                }`}>
+                                className={`ovalBtn submitBtn ${loading && "loading"}`}>
                                 Login
                             </Button>
                         </Form>
@@ -108,12 +92,7 @@ function Login() {
 
                 <Grid.Row>
                     <Grid.Column>
-                        <Button
-                            basic
-                            inverted
-                            name="toRegister"
-                            as={Link}
-                            to="/register">
+                        <Button basic inverted name="toRegister" as={Link} to="/register">
                             Don't have an account? Register
                         </Button>
                     </Grid.Column>

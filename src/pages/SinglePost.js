@@ -1,131 +1,137 @@
+import React, { useState, useEffect } from "react";
 import { useQuery } from "@apollo/client";
-import { useState, useEffect } from "react";
-import React from "react";
-
 import moment from "moment";
-
-import { useParams, useHistory, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { Card, Label, Image, Button, Grid, Loader } from "semantic-ui-react";
 
-import { useContextMethods } from "../context/methods";
+// import { useContextMethods } from "../context/methods";
+import { useDataLayerValue } from "../context/DataLayer";
 import LikeButton from "../components/LikeButton";
 import DeleteButton from "../components/DeleteButton";
 import CommentForm from "../components/CommentForm";
 import CommentCard from "../components/CommentCard";
 import MyPopup from "../util/MyPopup";
-
 import { GET_POST } from "../graphql/post";
 import { GET_POST_LIKES } from "../graphql/like";
 import { GET_POST_COMMENTS } from "../graphql/comment";
 
 function SinglePost() {
-  const history = useHistory();
-  const { post_id } = useParams();
+    const navigate = useNavigate();
+    const { post_id } = useParams();
 
-  const {
-    user: { _id: current_user },
-  } = useContextMethods();
+    // const {
+    //     user: { _id: current_user },
+    // } = useContextMethods();
 
-  const [singlePost, setSinglePost] = useState({
-    _id: "",
-    body: "",
-    created_at: "",
-    posted_by: {
-      _id: "",
-      username: "",
-    },
-  });
+    const [
+        {
+            user: { _id: current_user },
+        },
+    ] = useDataLayerValue();
 
-  const { data: post, loading } = useQuery(GET_POST, {
-    variables: { post_id },
-  });
+    useEffect(() => {
+        if (!current_user) navigate("/login");
+    }, [current_user, navigate]);
 
-  const { data: comments } = useQuery(GET_POST_COMMENTS, {
-    variables: { post_id },
-  });
+    const [singlePost, setSinglePost] = useState({
+        _id: "",
+        body: "",
+        created_at: "",
+        posted_by: {
+            _id: "",
+            username: "",
+        },
+    });
 
-  const { data: likes } = useQuery(GET_POST_LIKES, {
-    variables: { post_id },
-  });
+    const { data: post, loading } = useQuery(GET_POST, {
+        variables: { post_id },
+    });
 
-  useEffect(() => {
-    post && setSinglePost(post.getPost);
-  }, [post]);
+    const { data: comments } = useQuery(GET_POST_COMMENTS, {
+        variables: { post_id },
+    });
 
-  return (
-    <div className="SinglePost">
-      {loading ? (
-        <Loader active />
-      ) : (
-        <Grid style={{ padding: "0 2rem" }}>
-          <Grid.Row columns={2}>
-            <Grid.Column width={3}>
-              <Image
-                circular
-                size="small"
-                src={`https://avatars.dicebear.com/api/identicon/${singlePost.posted_by.username}.svg`}
-              />
-            </Grid.Column>
+    const { data: likes } = useQuery(GET_POST_LIKES, {
+        variables: { post_id },
+    });
 
-            <Grid.Column width={13}>
-              <Card fluid>
-                <Card.Content>
-                  <MyPopup content="View profile" position="top left">
-                    <Card.Header
-                      as={Link}
-                      to={`/profile/${singlePost.posted_by._id}`}
-                    >
-                      {singlePost.posted_by.username}
-                    </Card.Header>
-                  </MyPopup>
-                  <Card.Meta>
-                    {moment(singlePost.created_at).calendar()}
-                  </Card.Meta>
-                  <Card.Description>{singlePost.body}</Card.Description>
-                </Card.Content>
+    useEffect(() => {
+        post && setSinglePost(post.getPost);
+    }, [post]);
 
-                <Card.Content extra>
-                  {likes && (
-                    <LikeButton post_id={post_id} likes={likes.getPostLikes} />
-                  )}
+    return (
+        <div className="SinglePost">
+            {loading ? (
+                <Loader active />
+            ) : (
+                <Grid style={{ padding: "0 2rem" }}>
+                    <Grid.Row columns={2}>
+                        <Grid.Column width={3}>
+                            <Image
+                                circular
+                                size="small"
+                                src={`https://avatars.dicebear.com/api/identicon/${singlePost.posted_by.username}.svg`}
+                            />
+                        </Grid.Column>
 
-                  {comments && (
-                    <Button as="div" labelPosition="right" disabled>
-                      <Button basic color="orange" icon="comments" />
+                        <Grid.Column width={13}>
+                            <Card fluid>
+                                <Card.Content>
+                                    <MyPopup content="View profile" position="top left">
+                                        <Card.Header
+                                            as={Link}
+                                            to={`/profile/${singlePost.posted_by._id}`}>
+                                            {singlePost.posted_by.username}
+                                        </Card.Header>
+                                    </MyPopup>
+                                    <Card.Meta>
+                                        {moment(singlePost.created_at).calendar()}
+                                    </Card.Meta>
+                                    <Card.Description>{singlePost.body}</Card.Description>
+                                </Card.Content>
 
-                      <Label basic color="orange">
-                        {comments.getPostComments.length}
-                      </Label>
-                    </Button>
-                  )}
+                                <Card.Content extra>
+                                    {likes && (
+                                        <LikeButton post_id={post_id} likes={likes.getPostLikes} />
+                                    )}
 
-                  {current_user === singlePost.posted_by._id && (
-                    <DeleteButton
-                      post_id={post_id}
-                      callback={() => {
-                        history.push("/");
-                      }}
-                    />
-                  )}
-                </Card.Content>
-              </Card>
-            </Grid.Column>
-          </Grid.Row>
+                                    {comments && (
+                                        <Button as="div" labelPosition="right" disabled>
+                                            <Button basic color="orange" icon="comments" />
 
-          <Grid.Row>
-            <CommentForm post_id={post_id} />
-          </Grid.Row>
+                                            <Label basic color="orange">
+                                                {comments.getPostComments.length}
+                                            </Label>
+                                        </Button>
+                                    )}
 
-          {comments &&
-            comments.getPostComments.map((cmt) => (
-              <Grid.Row key={cmt._id}>
-                <CommentCard {...cmt} post_id={post_id} />
-              </Grid.Row>
-            ))}
-        </Grid>
-      )}
-    </div>
-  );
+                                    {current_user === singlePost.posted_by._id && (
+                                        <DeleteButton
+                                            post_id={post_id}
+                                            callback={() => {
+                                                navigate("/"); //{replace: true}
+                                            }}
+                                        />
+                                    )}
+                                </Card.Content>
+                            </Card>
+                        </Grid.Column>
+                    </Grid.Row>
+
+                    <Grid.Row>
+                        <CommentForm post_id={post_id} />
+                    </Grid.Row>
+
+                    {comments &&
+                        comments.getPostComments.map((cmt) => (
+                            <Grid.Row key={cmt._id}>
+                                <CommentCard {...cmt} post_id={post_id} />
+                            </Grid.Row>
+                        ))}
+                </Grid>
+            )}
+        </div>
+    );
 }
 
 export default SinglePost;

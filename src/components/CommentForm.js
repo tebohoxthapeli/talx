@@ -1,8 +1,7 @@
-import { useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { Card, Form } from "semantic-ui-react";
-import React from "react";
-
 import { useMutation } from "@apollo/client";
+
 import { CREATE_COMMENT } from "../graphql/comment"; // left out GET_POST_COMMENTS
 
 import "../styles/form.css";
@@ -42,8 +41,7 @@ function CommentForm({ post_id }) {
         <div className="CommentForm">
             <Card fluid>
                 <Card.Content style={{ background: "#171010" }}>
-                    <Card.Header
-                        style={{ marginBottom: "0.7rem", color: "white" }}>
+                    <Card.Header style={{ marginBottom: "0.7rem", color: "white" }}>
                         Type comment
                     </Card.Header>
 
@@ -63,9 +61,7 @@ function CommentForm({ post_id }) {
 
                             <button
                                 type="submit"
-                                className={`ui button ovalBtn submitBtn ${
-                                    loading && "loading"
-                                }`}
+                                className={`ui button ovalBtn submitBtn ${loading && "loading"}`}
                                 disabled={body.trim() === ""}
                                 onClick={callCreateComment}
                                 style={{ width: "30%" }}>

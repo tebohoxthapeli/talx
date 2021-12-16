@@ -1,32 +1,26 @@
 import { useDataLayerValue } from "./DataLayer";
-import React from "react";
+import { client } from "../ApolloProvider";
+function useContextMethods() {
+    const [, dispatch] = useDataLayerValue();
 
+    const logout = async () => {
+        if (localStorage.getItem("jwtToken")) {
+            localStorage.removeItem("jwtToken");
+            dispatch({ type: "LOGOUT" });
+            await client.clearStore();
+        }
+    };
 
-const useContextMethods = () => {
-  const [{ user }, dispatch] = useDataLayerValue();
+    const login = (userData) => {
+        logout();
+        localStorage.setItem("jwtToken", userData.token);
 
-  const logout = () => {
-    if (localStorage.getItem("jwtToken")) {
-      localStorage.removeItem("jwtToken");
-      dispatch({ type: "LOGOUT" });
-    }
-  };
-
-  const login = (userData) => {
-    logout();
-    localStorage.setItem("jwtToken", userData.token);
-
-    dispatch({
-      type: "LOGIN",
-      payload: userData,
-    });
-  };
-  
-  return {
-    user,
-    login,
-    logout,
-  };
-};
+        dispatch({
+            type: "LOGIN",
+            payload: userData,
+        });
+    };
+    return { login, logout };
+}
 
 export { useContextMethods };
