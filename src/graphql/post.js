@@ -62,7 +62,16 @@ const GET_ALL_POSTS = gql`
 
 const DELETE_POST = gql`
     mutation deletePost($post_id: ID!) {
-        deletePost(post_id: $post_id)
+        deletePost(post_id: $post_id) {
+            _id
+            body
+            created_at
+
+            posted_by {
+                _id
+                username
+            }
+        }
     }
 `;
 

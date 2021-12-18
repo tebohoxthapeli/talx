@@ -30,7 +30,15 @@ const client = new ApolloClient({
                         read(_, { args, toReference }) {
                             return toReference({
                                 __typename: "Post",
-                                _id: args._id,
+                                post_id: args.post_id,
+                            });
+                        },
+                    },
+                    getUserPosts: {
+                        read(_, { args, toReference }) {
+                            return toReference({
+                                __typename: "Post",
+                                id: args.user_id,
                             });
                         },
                     },

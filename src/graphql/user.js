@@ -27,7 +27,6 @@ const LOGIN = gql`
         login(username: $username, password: $password) {
             _id
             username
-            email
             token
         }
     }

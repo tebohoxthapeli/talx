@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Label, Button } from "semantic-ui-react";
-import { useMutation } from "@apollo/client";
+import { useMutation, gql } from "@apollo/client";
 
 import MyPopup from "../util/MyPopup";
-import { TOGGLE_LIKE, GET_POST_LIKES } from "../graphql/like";
+import { TOGGLE_LIKE } from "../graphql/like"; // removed GET_POST_LIKES
 import { useDataLayerValue } from "../context/DataLayer";
 
-function LikeButton({ post_id, likes }) {
+export default function LikeButton({ post_id, likes }) {
     const [
         {
             user: { _id: current_user },
@@ -14,6 +14,7 @@ function LikeButton({ post_id, likes }) {
     ] = useDataLayerValue();
 
     const [isLiked, setIsLiked] = useState(false);
+    const [likeCount, setLikeCount] = useState(likes.length);
 
     useEffect(() => {
         if (likes.find(({ liked_by }) => liked_by._id === current_user)) {
@@ -24,13 +25,65 @@ function LikeButton({ post_id, likes }) {
     const [toggleLike] = useMutation(TOGGLE_LIKE, {
         variables: { post_id },
 
-        refetchQueries: [
-            {
-                query: GET_POST_LIKES,
-                variables: { post_id },
-            },
-        ],
+        update(cache, { data: { toggleLike } }) {
+            cache.modify({
+                fields: {
+                    getPostLikes(existing, { storeFieldName }) {
+                        const QueryField = `getPostLikes({"post_id":"${post_id}"})`;
+
+                        const newLikeRef = cache.writeFragment({
+                            data: toggleLike,
+                            fragment: gql`
+                                fragment NewLike on Like {
+                                    _id
+                                    created_at
+
+                                    liked_by {
+                                        _id
+                                        username
+                                    }
+
+                                    liked_post {
+                                        _id
+                                    }
+
+                                    poster {
+                                        _id
+                                        username
+                                    }
+                                }
+                            `,
+                        });
+
+                        if (storeFieldName === QueryField) {
+                            if (isLiked) {
+                                return existing.filter(({ __ref }) => __ref !== newLikeRef.__ref);
+                            } else {
+                                return [newLikeRef, ...existing];
+                            }
+                        }
+                        return;
+                    },
+                },
+            });
+        },
+
+        onError(apolloError) {
+            console.error(apolloError.message);
+        },
     });
+
+    const handleClick = () => {
+        if (isLiked) {
+            setIsLiked(false);
+            setLikeCount(likeCount - 1);
+        } else {
+            setIsLiked(true);
+            setLikeCount(likeCount + 1);
+        }
+
+        toggleLike();
+    };
 
     const likeButton = isLiked ? (
         <Button color="orange" icon="heart" />
@@ -41,16 +94,10 @@ function LikeButton({ post_id, likes }) {
     return (
         <>
             <MyPopup content={isLiked ? "Unlike post" : "Like post"} position="top center">
-                <Button
-                    as="div"
-                    labelPosition="right"
-                    onClick={() => {
-                        setIsLiked(!isLiked);
-                        toggleLike();
-                    }}>
+                <Button as="div" labelPosition="right" onClick={handleClick}>
                     {likeButton}
                     <Label basic color="orange">
-                        {likes.length}
+                        {likeCount}
                     </Label>
                 </Button>
             </MyPopup>
@@ -58,4 +105,7 @@ function LikeButton({ post_id, likes }) {
     );
 }
 
-export default LikeButton;
+// () => {
+//                         setIsLiked(!isLiked);
+//                         toggleLike();
+//                     }

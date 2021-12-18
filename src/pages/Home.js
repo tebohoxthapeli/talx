@@ -3,14 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { Grid, Transition, Header, Loader } from "semantic-ui-react";
 
-// import { useContextMethods } from "../context/methods";
 import { useDataLayerValue } from "../context/DataLayer";
 import PostCard from "../components/PostCard";
 import PostForm from "../components/PostForm";
 import { GET_ALL_POSTS } from "../graphql/post";
 
 function Home() {
-    // const { user } = useContextMethods();
     const navigate = useNavigate();
     const [{ user }] = useDataLayerValue();
 
@@ -30,8 +28,8 @@ function Home() {
                         <PostForm />
                     </Grid.Row>
 
-                    {data && data.getAllPosts.length > 0 ? (
-                        <Transition.Group animation="fly left">
+                    {data.getAllPosts.length > 0 ? (
+                        <Transition.Group>
                             {data.getAllPosts.map((post) => (
                                 <Grid.Row key={post._id}>
                                     <PostCard {...post} />

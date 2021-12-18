@@ -1,88 +1,27 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Grid, Header, Transition, Loader } from "semantic-ui-react";
-import { useQuery, useLazyQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 
 import PostCard from "./PostCard";
-// import { useContextMethods } from "../context/methods";
-import { GET_ALL_POSTS, GET_USER_POSTS } from "../graphql/post";
-import { GET_USER_FOLLOWING } from "../graphql/follow";
-import { useDataLayerValue } from "../context/DataLayer";
+import { GET_USER_POSTS } from "../graphql/post";
 
-function ProfilePosts({ user_id }) {
-    // const {
-    //     user: { _id: current_user },
-    // } = useContextMethods();
-
-    const [
-        {
-            user: { _id: current_user },
-        },
-    ] = useDataLayerValue();
-
-    const { data: userFollowingData } = useQuery(GET_USER_FOLLOWING, {
-        variables: { user_id: current_user },
+export default function ProfilePosts({ user_id }) {
+    const { data, loading } = useQuery(GET_USER_POSTS, {
+        variables: { user_id },
     });
-
-    const [getAllPosts, { data: allPostsData, loading: allPostsLoading }] =
-        useLazyQuery(GET_ALL_POSTS);
-
-    const [getUserPosts, { data: userPostsData, loading: userPostsLoading }] = useLazyQuery(
-        GET_USER_POSTS,
-        {
-            variables: { user_id },
-        }
-    );
-
-    const [isFollowingOrOwn, setIsFollowingOrOwn] = useState(false);
-
-    useEffect(() => {
-        if (current_user === user_id) {
-            setIsFollowingOrOwn(true);
-        } else {
-            if (userFollowingData) {
-                setIsFollowingOrOwn(
-                    userFollowingData.getUserFollowing.find(
-                        ({ follow_to }) => follow_to._id === user_id
-                    )
-                        ? true
-                        : false
-                );
-            }
-        }
-    }, [userFollowingData, user_id, current_user]);
-
-    useEffect(() => {
-        isFollowingOrOwn ? getAllPosts() : getUserPosts();
-    }, [isFollowingOrOwn, getAllPosts, getUserPosts]);
-
-    const [userPosts, setUserPosts] = useState([]);
-
-    useEffect(() => {
-        if (allPostsData) {
-            setUserPosts(
-                allPostsData.getAllPosts.filter(({ posted_by }) => posted_by._id === user_id)
-            );
-        }
-    }, [allPostsData, user_id]);
-
-    useEffect(() => {
-        if (userPostsData) {
-            setUserPosts(userPostsData.getUserPosts);
-        }
-    }, [userPostsData]);
-
+    
     return (
         <div className="ProfilePosts" style={{ marginTop: "2rem" }}>
-            {allPostsLoading || userPostsLoading ? (
+            {loading ? (
                 <Loader active />
-            ) : userPosts.length > 0 ? (
+            ) : data.getUserPosts.length > 0 ? (
                 <Grid padded>
                     <Grid.Row>
                         <Header as="h2">Posts</Header>
                     </Grid.Row>
 
                     <Transition.Group>
-                        {userPosts.map((post) => (
+                        {data.getUserPosts.map((post) => (
                             <Grid.Row key={post._id}>
                                 <PostCard {...post} onProfilePage={true} />
                             </Grid.Row>
@@ -99,5 +38,3 @@ function ProfilePosts({ user_id }) {
         </div>
     );
 }
-
-export default ProfilePosts;

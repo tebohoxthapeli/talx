@@ -36,14 +36,14 @@ function MenuBar() {
                 {pathname === "/" ? (
                     <div>
                         <Header as={Link} to="/" size="huge">
-                            TalkX
+                            TalX
                         </Header>
                     </div>
                 ) : (
                     <MyPopup content="Go back home" position="right center">
                         <div>
                             <Header as={Link} to="/" size="huge">
-                                TalkX
+                                TalX
                             </Header>
                         </div>
                     </MyPopup>

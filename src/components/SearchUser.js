@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { Input, Button, Header, Grid, Image } from "semantic-ui-react";
+import { Input, Button, Header, Grid, Image, Form } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 
 import { useLazyQuery } from "@apollo/client";
 import { SEARCH_USER } from "../graphql/user";
 
-function SearchUser() {
+export default function SearchUser() {
     const [username, setUsername] = useState("");
     const [errors, setErrors] = useState({
         notFound: "",
@@ -13,11 +13,28 @@ function SearchUser() {
 
     const [searchUser, { data, loading, error }] = useLazyQuery(SEARCH_USER, {
         variables: { username },
-
         onError(apolloError) {
             setErrors(apolloError.graphQLErrors[0].extensions.errors);
         },
     });
+
+    const handleSubmit = () => {
+        setErrors({
+            notFound: "",
+        });
+        searchUser();
+        document.activeElement.blur();
+    };
+
+    const resultStyle = {
+        border: "1px solid #706e6d",
+        borderRadius: "0.28571429rem",
+        paddingLeft: "1rem",
+        paddingRight: "1rem",
+        marginTop: "1.5rem",
+        marginLeft: "1.5rem",
+        marginRight: "1.5rem",
+    };
 
     return (
         <div className="SearchUser">
@@ -27,38 +44,28 @@ function SearchUser() {
                 </Grid.Row>
 
                 <Grid.Row centered>
-                    <Input
-                        type="text"
-                        placeholder="Enter username..."
-                        action
-                        autoComplete="off"
-                        spellCheck="false"
-                        onChange={(e) => setUsername(e.target.value)}
-                        value={username}>
-                        <input />
+                    <Form onSubmit={handleSubmit} style={{ display: "flex", alignItems: "center" }}>
+                        <Input
+                            type="text"
+                            placeholder="Enter username..."
+                            action
+                            autoComplete="off"
+                            spellCheck="false"
+                            onChange={(e) => setUsername(e.target.value)}
+                            value={username}
+                        />
 
                         <Button
+                            className="searchBtn"
                             loading={loading ? true : false}
                             icon="search"
                             type="submit"
-                            onClick={() => {
-                                setErrors({
-                                    notFound: "",
-                                });
-                                searchUser();
-                            }}
                         />
-                    </Input>
+                    </Form>
                 </Grid.Row>
 
                 {data && (
-                    <Grid.Row
-                        style={{
-                            border: "1px solid #f98404",
-                            borderRadius: "0.28571429rem",
-                            paddingLeft: "1rem",
-                            paddingRight: "1rem",
-                        }}>
+                    <Grid.Row style={resultStyle}>
                         <Link to={`/profile/${data.searchUser._id}`}>
                             <Header
                                 as="h3"
@@ -72,7 +79,9 @@ function SearchUser() {
                                 />
                                 {username}
                             </Header>
-                            <p style={{ color: "white" }}>{`${data.searchUser.about}`}</p>
+                            {data.searchUser.about && (
+                                <p style={{ color: "white" }}>{`${data.searchUser.about}`}</p>
+                            )}
                         </Link>
                     </Grid.Row>
                 )}
@@ -88,5 +97,3 @@ function SearchUser() {
         </div>
     );
 }
-
-export default SearchUser;

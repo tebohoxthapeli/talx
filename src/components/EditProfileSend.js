@@ -1,16 +1,14 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Form, Button, Grid, Header } from "semantic-ui-react";
-import { useMutation } from "@apollo/client";
+import { useMutation, gql } from "@apollo/client";
 
 import { useContextMethods } from "../context/methods";
 import { useForm } from "../util/hooks";
-import { EDIT_USER } from "../graphql/user"; // removed GET_USER
+import { EDIT_USER } from "../graphql/user";
 
-function EditProfileSend({ user }) {
+function EditProfileSend({ user: { _id: user_id, username, email, location, website, about } }) {
     const navigate = useNavigate();
-    const { _id: user_id, username, email, location, website, about } = user;
-    console.log(user);
     const { login } = useContextMethods();
     const [errors, setErrors] = useState({});
 
@@ -23,36 +21,41 @@ function EditProfileSend({ user }) {
     });
 
     const [editUser, { loading }] = useMutation(EDIT_USER, {
-        variables: {
-            ...values,
+        variables: { ...values },
+
+        update(cache, { data: { editUser } }) {
+            cache.modify({
+                fields: {
+                    getUser(_, { storeFieldName }) {
+                        const fieldName = `getUser({"user_id": "${user_id}"})`;
+
+                        if (storeFieldName === fieldName) {
+                            const editedUserRef = cache.writeFragment({
+                                data: editUser,
+                                fragment: gql`
+                                    fragment EditedUser on User {
+                                        _id
+                                        username
+                                        email
+                                        joined_on
+                                        website
+                                        location
+                                        about
+                                    }
+                                `,
+                            });
+                            return editedUserRef;
+                        }
+                        return;
+                    },
+                },
+            });
         },
 
-        refetchQueries: ["getUser"],
-
-        onCompleted({ editUser: userData }) {
-            login(userData);
-            navigate(`/profile/${user_id}`);
-
-            // when you want to redirect:
-            // navigate(`/profile/${user_id}`, { replace: true });
-            //
-            // something else you can do
-            // navigate(-1) to go to the previous page
-            // navigate(-2) to the page before the last one
-            // navigate(1) to go forward again
+        onCompleted({ editUser }) {
+            login(editUser);
+            navigate(`/profile/${user_id}`, { replace: true });
         },
-
-        // update(cache, { data: { editUser } }) {
-        //     if (!loading) {
-        //         cache.writeQuery({
-        //             query: GET_USER,
-        //             variables: { user_id },
-        //             data: {
-        //                 getUser: editUser,
-        //             },
-        //         });
-        //     }
-        // },
 
         onError(apolloError) {
             setErrors(apolloError.graphQLErrors[0].extensions.errors);
@@ -176,3 +179,11 @@ function EditProfileSend({ user }) {
 }
 
 export default EditProfileSend;
+
+// when you want to redirect:
+// navigate(`/profile/${user_id}`, { replace: true });
+//
+// something else you can do
+// navigate(-1) to go to the previous page
+// navigate(-2) to the page before the last one
+// navigate(1) to go forward again

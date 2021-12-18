@@ -4,7 +4,6 @@ import moment from "moment";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { Card, Label, Image, Button, Grid, Loader } from "semantic-ui-react";
 
-// import { useContextMethods } from "../context/methods";
 import { useDataLayerValue } from "../context/DataLayer";
 import LikeButton from "../components/LikeButton";
 import DeleteButton from "../components/DeleteButton";
@@ -18,10 +17,6 @@ import { GET_POST_COMMENTS } from "../graphql/comment";
 function SinglePost() {
     const navigate = useNavigate();
     const { post_id } = useParams();
-
-    // const {
-    //     user: { _id: current_user },
-    // } = useContextMethods();
 
     const [
         {

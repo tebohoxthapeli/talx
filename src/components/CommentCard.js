@@ -3,16 +3,11 @@ import moment from "moment";
 import { Card, Image } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 
-// import { useContextMethods } from "../context/methods";
 import DeleteButton from "./DeleteButton";
 import MyPopup from "../util/MyPopup";
 import { useDataLayerValue } from "../context/DataLayer";
 
 function CommentCard({ _id: comment_id, body, created_at, commented_by, post_id }) {
-    // const {
-    //   user: { _id: current_user },
-    // } = useContextMethods();
-
     const [
         {
             user: { _id: current_user },

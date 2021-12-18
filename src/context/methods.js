@@ -1,6 +1,7 @@
 import { useDataLayerValue } from "./DataLayer";
 import { client } from "../ApolloProvider";
-function useContextMethods() {
+
+export function useContextMethods() {
     const [, dispatch] = useDataLayerValue();
 
     const logout = async () => {
@@ -12,7 +13,6 @@ function useContextMethods() {
     };
 
     const login = (userData) => {
-        logout();
         localStorage.setItem("jwtToken", userData.token);
 
         dispatch({
@@ -22,5 +22,3 @@ function useContextMethods() {
     };
     return { login, logout };
 }
-
-export { useContextMethods };

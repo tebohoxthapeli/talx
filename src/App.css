@@ -1,115 +1,123 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700&display=swap");
 
 :root {
-  --orange-50: #fcf8041a;
-  --orange-100: #f7fd04;
-  --orange-200: #f9b108;
-  --orange-250: #f39734;
-  --orange-255: #f39734ab;
-  --orange-300: #f98404;
-  --orange-400: #fc5404;
+    --orange-50: #fcf8041a;
+    --orange-100: #f7fd04;
+    --orange-200: #f9b108;
+    --orange-250: #f39734;
+    --orange-255: #f39734ab;
+    --orange-300: #f98404;
+    --orange-400: #fc5404;
 
-  --orange-primary: #ff851b;
+    --orange-primary: #ff851b;
 
-  --black-20: #d8d4d2;
-  --black-30: #c4bfbd;
-  --black-50: #918e8d;
-  --black-70: #706e6d;
-  --black-90: #5f5d5d;
-  --black-100: #423f3e;
-  --black-200: #2b2b2b;
-  --black-250: #242323;
-  --black-300: #171010;
+    --black-20: #d8d4d2;
+    --black-30: #c4bfbd;
+    --black-50: #918e8d;
+    --black-70: #706e6d;
+    --black-90: #5f5d5d;
+    --black-100: #423f3e;
+    --black-200: #2b2b2b;
+    --black-250: #242323;
+    --black-300: #171010;
 
-  --error-color: rgb(247, 127, 127);
+    --error-color: rgb(247, 127, 127);
 
-  --barelyWhite: rgba(255, 255, 255, 0.1);
-  --borderRadius: 0.28571429rem;
+    --barelyWhite: rgba(255, 255, 255, 0.1);
+    --borderRadius: 0.28571429rem;
 }
 
 /* ----- EVERYTHING EXCEPT CLASS OF .ICON ----- */
 
 *:not(.icon) {
-  box-sizing: border-box;
-  font-family: "Roboto", sans-serif !important;
+    box-sizing: border-box;
+    font-family: "Roboto", sans-serif !important;
 }
 
 .App__Container {
-  width: 100vw;
+    width: 100vw;
 }
 
 .App__Container,
 .App__Grid,
 .App__Main {
-  height: 100%;
+    height: 100%;
 }
 
 .App__Grid {
-  display: grid;
-  grid-template-columns: 2.5fr 5fr 2.5fr;
-  background-color: var(--black-300);
-  position: static;
-  z-index: -10;
-  width: 100vw;
+    display: grid;
+    grid-template-columns: 2.5fr 5fr 2.5fr;
+    background-color: var(--black-300);
+    position: static;
+    z-index: -10;
+    width: 100vw;
 }
 
 .App__Main {
-  grid-column: 2/3;
-  padding: 0 1rem;
-  border-left: 1px solid var(--black-200);
-  border-right: 1px solid var(--black-200);
+    grid-column: 2/3;
+    padding: 0 1rem;
+    border-left: 1px solid var(--black-200);
+    border-right: 1px solid var(--black-200);
 }
 
 .App__Grid-right {
-  grid-column: 3/4;
-  padding: 0 1rem;
+    grid-column: 3/4;
+    padding: 0 1rem;
 }
 
 .MenuBar {
-  display: grid;
-  grid-template-columns: 2.5fr 5fr 2.5fr;
-  align-items: center;
-  justify-items: center;
-  width: 100vw;
-  height: 5rem;
-  background-color: var(--black-200);
-  position: fixed;
-  top: 0%;
-  z-index: 10;
+    display: grid;
+    grid-template-columns: 2.5fr 5fr 2.5fr;
+    align-items: center;
+    justify-items: center;
+    width: 100vw;
+    height: 5rem;
+    background-color: var(--black-200);
+    position: fixed;
+    top: 0%;
+    z-index: 10;
 }
 
 .SearchUser {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
+.ui.input.action > input {
+    border: 1px solid var(--black-70);
+}
+
+.searchBtn {
+    border: 1px solid var(--black-70) !important;
 }
 
 .ui.input.action > input,
-.ui.action.input > .button {
-  border: 1px solid var(--black-70);
+.ui.input.action > input:focus {
+    border-right: none;
 }
 
-.ui.action.input > .button {
-  background: transparent;
-  color: var(--black-70);
+.searchBtn {
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
 }
 
-.ui.action.input > .button:hover {
-  color: var(--black-300);
-  background: var(--orange-300);
-  border-color: var(--orange-300);
+.searchBtn {
+    background: transparent !important;
+    color: var(--black-70) !important;
 }
 
-.ui.input.action > input:focus .ui.action.input > .button {
-  border-color: var(--orange-300);
+.searchBtn:hover {
+    color: var(--black-300) !important;
+    background: var(--orange-300) !important;
+    border-color: var(--orange-300) !important;
 }
 
 .SinglePost,
 .EditProfile {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
 }
 
 .Home,
@@ -119,11 +127,11 @@
 .Following,
 .Followers,
 .SearchUser {
-  margin-top: 5rem;
-  padding-top: 2rem;
-  max-height: calc(100vh - 5rem);
-  min-height: calc(100vh - 5rem);
-  width: 100%;
+    margin-top: 5rem;
+    padding-top: 2rem;
+    max-height: calc(100vh - 5rem);
+    min-height: calc(100vh - 5rem);
+    width: 100%;
 }
 
 .Home,
@@ -132,8 +140,8 @@
 .EditProfile,
 .Following,
 .Followers {
-  overflow-y: scroll;
-  overflow-x: hidden;
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 .Home::-webkit-scrollbar,
@@ -142,7 +150,7 @@
 .EditProfile::-webkit-scrollbar,
 .Followers::-webkit-scrollbar,
 .Following::-webkit-scrollbar {
-  width: 5px;
+    width: 5px;
 }
 
 .Home::-webkit-scrollbar-track,
@@ -151,8 +159,8 @@
 .EditProfile::-webkit-scrollbar-track,
 .Followers::-webkit-scrollbar-track,
 .Following::-webkit-scrollbar-track {
-  margin: 1rem 0;
-  background: transparent;
+    margin: 1rem 0;
+    background: transparent;
 }
 
 .Home::-webkit-scrollbar-thumb,
@@ -161,7 +169,7 @@
 .SinglePost::-webkit-scrollbar-thumb,
 .Followers::-webkit-scrollbar-thumb,
 .Following::-webkit-scrollbar-thumb {
-  background: var(--black-100);
+    background: var(--black-100);
 }
 
 .Home::-webkit-scrollbar-thumb:hover,
@@ -170,45 +178,45 @@
 .EditProfile::-webkit-scrollbar-thumb:hover,
 .Following::-webkit-scrollbar-thumb:hover,
 .Followers::-webkit-scrollbar-thumb:hover {
-  background: var(--black-70);
+    background: var(--black-70);
 }
 
 /* ----- INSIDE LOGIN + REGISTER PAGES ------*/
 .Form__Container {
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
-  width: 100vw !important;
-  height: 100vh !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100vw !important;
+    height: 100vh !important;
 }
 
 /* ------- HUGE LINK + NORMAL HEADERS --------*/
 
 a.ui.huge.header,
 .ui.huge.header {
-  color: white;
+    color: white;
 }
 
 /* ------- HUGE LINK HEADER HOVER + FOCUS --------*/
 
 a.ui.huge.header:hover,
 a.ui.huge.header:focus {
-  color: var(--black-30);
+    color: var(--black-30);
 }
 
 /* ------- H3 HEADER --------*/
 
 h3.ui.header {
-  color: var(--orange-300);
+    color: var(--orange-300);
 }
 
 /* ------- H3 HEADER HOVER + FOCUS --------*/
 
 h3.ui.header:hover,
 h3.ui.header:focus {
-  color: var(--orange-200);
+    color: var(--orange-200);
 }
 
 .ovalBtn {
-  border-radius: 25px !important;
+    border-radius: 25px !important;
 }

@@ -17,7 +17,16 @@ const CREATE_COMMENT = gql`
 
 const DELETE_COMMENT = gql`
     mutation deleteComment($comment_id: ID!) {
-        deleteComment(comment_id: $comment_id)
+        deleteComment(comment_id: $comment_id) {
+            _id
+            body
+            created_at
+
+            commented_by {
+                _id
+                username
+            }
+        }
     }
 `;
 

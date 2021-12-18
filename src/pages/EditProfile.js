@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { Loader } from "semantic-ui-react";
@@ -7,15 +7,14 @@ import { useDataLayerValue } from "../context/DataLayer";
 import EditProfileSend from "../components/EditProfileSend";
 import { GET_USER } from "../graphql/user";
 
-function EditProfile() {
+export default function EditProfile() {
     const navigate = useNavigate();
+
     const [
         {
             user: { _id: current_user },
         },
     ] = useDataLayerValue();
-
-    const userRef = useRef();
 
     useEffect(() => {
         if (!current_user) navigate("/login");
@@ -31,5 +30,3 @@ function EditProfile() {
         </div>
     );
 }
-
-export default EditProfile;

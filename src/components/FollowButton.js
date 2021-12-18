@@ -1,56 +1,106 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "semantic-ui-react";
-import { useMutation, useQuery } from "@apollo/client";
+import { useMutation, useQuery, gql } from "@apollo/client";
 
-// import { useContextMethods } from "../context/methods";
 import { TOGGLE_FOLLOW, GET_USER_FOLLOWING } from "../graphql/follow";
+import { GET_ALL_POSTS } from "../graphql/post";
 import { useDataLayerValue } from "../context/DataLayer";
-// import { GET_ALL_POSTS } from "../graphql/post";
 
-function FollowButton({ user_id }) {
-    // ---- CURRENT USER -----
-    // const {
-    //     user: { _id: current_user },
-    // } = useContextMethods();
-
+export default function FollowButton({ user_id }) {
     const [
         {
             user: { _id: current_user },
         },
     ] = useDataLayerValue();
 
-    // ----- CURRENT USER FOLLOWING -----
-    const { data: currentUserData } = useQuery(GET_USER_FOLLOWING, {
+    const { data } = useQuery(GET_USER_FOLLOWING, {
         variables: { user_id: current_user },
     });
 
     const [isCurrentUserFollowing, setIsCurrentUserFollowing] = useState(false);
 
     useEffect(() => {
-        currentUserData &&
+        data &&
             setIsCurrentUserFollowing(
-                currentUserData.getUserFollowing.find(({ follow_to }) => follow_to._id === user_id)
+                data.getUserFollowing.find(({ follow_to }) => follow_to._id === user_id)
                     ? true
                     : false
             );
-    }, [currentUserData, user_id]);
+    }, [data, user_id]);
 
     const [toggleFollow] = useMutation(TOGGLE_FOLLOW, {
         variables: { user_id },
-        refetchQueries: ["getUserFollowing", "getAllPosts"],
-        // refetchQueries: [
-        //   {
-        //     query: GET_USER_FOLLOWING,
-        //     variables: { user_id: current_user },
-        //   },
-        //   {
-        //     query: GET_ALL_POSTS,
-        //   },
-        // ],
+
+        refetchQueries: [
+            {
+                query: GET_ALL_POSTS,
+            },
+        ],
+
+        update(cache, { data: { toggleFollow } }) {
+            const newFollowRef = cache.writeFragment({
+                data: toggleFollow,
+                fragment: gql`
+                    fragment NewFollow on Follow {
+                        _id
+                        created_at
+
+                        follow_to {
+                            _id
+                            username
+                            about
+                        }
+
+                        follow_from {
+                            _id
+                            username
+                            about
+                        }
+                    }
+                `,
+            });
+
+            cache.modify({
+                fields: {
+                    getUserFollowing(existing, { storeFieldName }) {
+                        const QueryField = `getUserFollowing({"user_id":"${current_user}"})`;
+
+                        if (storeFieldName === QueryField) {
+                            if (isCurrentUserFollowing) {
+                                return existing.filter(({ __ref }) => __ref !== newFollowRef.__ref);
+                            } else {
+                                return [newFollowRef, ...existing];
+                            }
+                        }
+                        return;
+                    },
+
+                    getUserFollowers(existing, { storeFieldName }) {
+                        const QueryField = `getUserFollowers({"user_id":"${user_id}"})`;
+
+                        if (storeFieldName === QueryField) {
+                            if (isCurrentUserFollowing) {
+                                return existing.filter(({ __ref }) => __ref !== newFollowRef.__ref);
+                            } else {
+                                return [newFollowRef, ...existing];
+                            }
+                        }
+                        return;
+                    },
+                },
+            });
+        },
+
         onError(apolloError) {
-            console.log(apolloError.message);
+            console.error(apolloError.message);
         },
     });
+
+    const handleClick = () => {
+        setIsCurrentUserFollowing(!isCurrentUserFollowing);
+        toggleFollow();
+        document.activeElement.blur();
+    };
 
     return (
         <>
@@ -60,11 +110,9 @@ function FollowButton({ user_id }) {
                     content={`${isCurrentUserFollowing ? "Unfollow" : "Follow"}`}
                     inverted
                     color={`${isCurrentUserFollowing ? "red" : "green"}`}
-                    onClick={toggleFollow}
+                    onClick={handleClick}
                 />
             )}
         </>
     );
 }
-
-export default FollowButton;

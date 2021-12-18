@@ -1,28 +1,52 @@
 import React from "react";
 import { Form, Button, TextArea } from "semantic-ui-react";
-import { useMutation } from "@apollo/client";
+import { useMutation, gql } from "@apollo/client";
 
 import { useForm } from "../util/hooks";
 import { CREATE_POST } from "../graphql/post";
 
 import "../styles/form.css";
 
-function PostForm() {
+export default function PostForm() {
     const { values, onChange, onSubmit } = useForm(createPostCallback, {
         body: "",
     });
 
     const [createPost, { loading }] = useMutation(CREATE_POST, {
-        variables: values,
-        refetchQueries: ["getAllPosts"],
+        update(cache, { data: { createPost } }) {
+            cache.modify({
+                fields: {
+                    getAllPosts(existing) {
+                        const newPostRef = cache.writeFragment({
+                            data: createPost,
+                            fragment: gql`
+                                fragment NewPost on Post {
+                                    _id
+                                    body
+                                    created_at
+                                                                               
+                                    posted_by {
+                                        _id
+                                        username
+                                    }
+                                }
+                            `,
+                        });
+                        return [newPostRef, ...existing];
+                    },
+                },
+            });
+
+            values.body = "";
+        },
+
         onError(apolloError) {
             return apolloError;
         },
     });
 
     function createPostCallback() {
-        createPost();
-        values.body = "";
+        createPost({ variables: values });
     }
 
     return (
@@ -44,5 +68,3 @@ function PostForm() {
         </div>
     );
 }
-
-export default PostForm;

@@ -33,6 +33,15 @@ const GET_POST_LIKES = gql`
                 _id
                 username
             }
+
+            liked_post {
+                _id
+            }
+
+            poster {
+                _id
+                username
+            }
         }
     }
 `;

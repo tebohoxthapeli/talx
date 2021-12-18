@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import moment from "moment";
 import { useQuery } from "@apollo/client";
 
-// import { useContextMethods } from "../context/methods";
 import { useDataLayerValue } from "../context/DataLayer";
 import LikeButton from "./LikeButton";
 import DeleteButton from "./DeleteButton";
@@ -15,10 +14,6 @@ import { GET_POST_COMMENTS } from "../graphql/comment";
 import "../styles/card.css";
 
 function PostCard({ _id: post_id, body, created_at, posted_by, onProfilePage }) {
-    // const {
-    //     user: { _id: user_id },
-    // } = useContextMethods();
-
     const [
         {
             user: { _id: user_id },

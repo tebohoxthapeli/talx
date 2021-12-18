@@ -9,6 +9,13 @@ const TOGGLE_FOLLOW = gql`
             follow_to {
                 _id
                 username
+                about
+            }
+
+            follow_from {
+                _id
+                username
+                about
             }
         }
     }
@@ -19,6 +26,12 @@ const GET_USER_FOLLOWERS = gql`
         getUserFollowers(user_id: $user_id) {
             _id
             created_at
+
+            follow_to {
+                _id
+                username
+                about
+            }
 
             follow_from {
                 _id
@@ -36,6 +49,12 @@ const GET_USER_FOLLOWING = gql`
             created_at
 
             follow_to {
+                _id
+                username
+                about
+            }
+
+            follow_from {
                 _id
                 username
                 about
